@@ -7,7 +7,6 @@ from datetime import datetime      # Provides System Date and time data
 
 
 
-
 # Jexi Voice Code
 
 def Jexi_Speak(Line):
@@ -23,7 +22,6 @@ def Jexi_Speak(Line):
     print(Line)                                 # Printing Jexi Response
     print()                                     # Adding space between Response
     pyttsx3.speak(Line)                         # Jexi's Audio Response
-    
     
     
     
@@ -43,12 +41,11 @@ def Greeting():
         greeting = "Hello"                                                   
 
     first_Line = greeting + ", My name is Jexi \n How may i help You"         # Jexi's First Line
-
+    print()
     Jexi_Speak(first_Line) 
-
-
-
-
+    
+    
+    
 # Key Words Function Code
 
 def Key_Word(Action, Key):
@@ -89,7 +86,6 @@ def Key_Word(Action, Key):
     
     
     
-    
 # Web Activity Code
 
 def Web_Browsing(Action):
@@ -118,7 +114,7 @@ def Web_Browsing(Action):
             Jexi_Speak("Have Fun.")
             
         elif (Key_Word (url, "url")[0]):                                      # If addess doesn't have a domain the check the Keyword List
-            web.open (Key_Word (url, "url")[1] + ".com")
+            web.open (url + ".com")
             Jexi_Speak("Have Fun.")
             
         else:                                                                 # Still if not in recognised format then do a Google Search for the address
@@ -177,6 +173,6 @@ def main():
     Menu()                # Main Menu Function Call
     
     
-    
+  
 if __name__ == "__main__":
     main()
