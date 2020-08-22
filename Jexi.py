@@ -92,13 +92,13 @@ def Web_Browsing(Action):
     
     if (("search" in Action) or ("google" in Action)):                        # Google Search Action
         Jexi_Speak ("What do you want to search for?")
-        search = input()
+        search = input(" :) ")
         Jexi_Speak ("Here's what i found for " + search + " on google.")      
         web.open ("https://www.google.com/search?q=" + search)
         
     else:                                                                     # Going to a Website
         Jexi_Speak ("Where do you wanna go?")
-        Action = input().lower()
+        Action = input(" :) ").lower()
             
         if ("https" not in Action):                                           # Adding HTTPS for more secured Connection
             url = "https://" + Action 
@@ -120,10 +120,9 @@ def Web_Browsing(Action):
         else:                                                                 # Still if not in recognised format then do a Google Search for the address
             Jexi_Speak ("I don't recognise this website, Let me run a Google Search for it instead.")
             web.open("https://www.google.com/search?q=" + url)
-
-
-
-
+            
+            
+            
 # Main Menu Code
 
 def Menu():
@@ -151,7 +150,7 @@ def Menu():
         
         elif ("wordpad" in Action):                                             # Open Wordpad
             os.system("C:\\Windows\\System32\\write.exe")
-            Jexi_Speak("Sure")
+            Jexi_Speak("Right away")
             
         elif (("website" in Action) or ("search" in Action)):                   # Web Activity Function Call
             Web_Browsing(Action)
@@ -173,6 +172,6 @@ def main():
     Menu()                # Main Menu Function Call
     
     
-  
+    
 if __name__ == "__main__":
     main()
