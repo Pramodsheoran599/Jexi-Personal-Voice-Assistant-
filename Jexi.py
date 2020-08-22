@@ -6,6 +6,8 @@ import webbrowser as web           # Helps in Web based Activities
 from datetime import datetime      # Provides System Date and time data
 
 
+
+
 # Jexi Voice Code
 
 def Jexi_Speak(Line):
@@ -21,8 +23,10 @@ def Jexi_Speak(Line):
     print(Line)                                 # Printing Jexi Response
     print()                                     # Adding space between Response
     pyttsx3.speak(Line)                         # Jexi's Audio Response
-	
-	
+    
+    
+    
+    
 # Inital Greeting Code
 
 def Greeting(): 
@@ -41,7 +45,9 @@ def Greeting():
     first_Line = greeting + ", My name is Jexi \n How may i help You"         # Jexi's First Line
 
     Jexi_Speak(first_Line) 
-	
+
+
+
 
 # Key Words Function Code
 
@@ -50,29 +56,40 @@ def Key_Word(Action, Key):
     # Defining Key words for Easy future Expansion
   
     Url_Keys = ["youtube","google","instagram","yahoo","linkedin","facebook","gmail","amazon"]
-    App_Keys = ["chrome","notepad","wmplayer","blender","explorer"]
-    Exit_Keys = ["bye","close","exit","terminate","quit"]    
+    App_Keys = ["notepad","chrome","wmplayer","blender","explorer"]
+    Exit_Keys = ["bye","close","exit","terminate","quit"]  
+    
+    Output = []
     
     if (Key == "url"):                      # Checking Url Keywords
         for x in Url_Keys:
             if (x in Action):
-                return True
+                Output = [True,x]
+                return Output
+            else:
+                Output = [False,x]
             
     elif (Key == "App"):                    # Checking Application Keywords
         for x in App_Keys:
             if (x in Action):
-                return (True,x)
-            
-        return False
+                Output = [True,x]
+                return Output
+            else:
+                Output = [False,x]
             
     elif (Key == "Exit"):                   # Checking Exit Keywords
         for x in Exit_Keys:
             if (x in Action):
-                return (True,x)
+                Output = [True,x]
+                return Output
             else:
-                return (False,x)
-				
-				
+                Output = [False,x]
+                
+    return Output
+    
+    
+    
+    
 # Web Activity Code
 
 def Web_Browsing(Action):
@@ -100,15 +117,17 @@ def Web_Browsing(Action):
             web.open (url)
             Jexi_Speak("Have Fun.")
             
-        elif (Key_Word (url, "url")):                                         # If addess doesn't have a domain the check the Keyword List
-            web.open (url + ".com")
+        elif (Key_Word (url, "url")[0]):                                      # If addess doesn't have a domain the check the Keyword List
+            web.open (Key_Word (url, "url")[1] + ".com")
             Jexi_Speak("Have Fun.")
             
         else:                                                                 # Still if not in recognised format then do a Google Search for the address
             Jexi_Speak ("I don't recognise this website, Let me run a Google Search for it instead.")
             web.open("https://www.google.com/search?q=" + url)
-			
-			
+
+
+
+
 # Main Menu Code
 
 def Menu():
@@ -141,21 +160,23 @@ def Menu():
         elif (("website" in Action) or ("search" in Action)):                   # Web Activity Function Call
             Web_Browsing(Action)
        
-        elif (Key_Word (Action, "Exit")[0]):                                    # Saying Good Bye.
+        elif ("bye" in Action):                                                 # Saying Good Bye.
             Jexi_Speak("Until we meet again.")
             break                                                               # Break out of Menu Loop
             
         else:
             Jexi_Speak("Sorry, I don't support this Action")                    # Non Supported Action
-			
-			
+            
+            
+            
 # main Function
 
 def main():
     
     Greeting()            # Greeting Function Call
     Menu()                # Main Menu Function Call
-	
-	
+    
+    
+    
 if __name__ == "__main__":
     main()
