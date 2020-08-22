@@ -1,9 +1,9 @@
 # Importing Libraries
 
-import pyttsx3
-import os
-import webbrowser as web
-from datetime import datetime
+import pyttsx3                     # Text to Speech Conversion Library
+import os                          # Provides interaction with Operating System
+import webbrowser as web           # Helps in Web based Activities
+from datetime import datetime      # Provides System Date and time data
 
 
 # Jexi Voice Code
@@ -11,112 +11,151 @@ from datetime import datetime
 def Jexi_Speak(Line):
     
     Driver = pyttsx3.init() 
-    voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"
-    Driver.setProperty('voice', voice_id)  
-    Driver.setProperty('volume', 0.9)
-    Driver.setProperty('rate', 185)
+    voice_id = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0"     # Default Voice For Jexi
+    
+    Driver.setProperty('voice', voice_id)       # Setting the Voice id for Jexi
+    Driver.setProperty('volume', 0.9)           # Loudness in Jexi's Voice
+    Driver.setProperty('rate', 185)             # Speed of Jexi's Voice
     Driver.runAndWait()
-    print(Line)
-    pyttsx3.speak(Line)
+    
+    print(Line)                                 # Printing Jexi Response
+    print()                                     # Adding space between Response
+    pyttsx3.speak(Line)                         # Jexi's Audio Response
 	
-
+	
 # Inital Greeting Code
 
 def Greeting(): 
     
-    current_Time = int(datetime.now().strftime("%H"))
+    current_Time = int(datetime.now().strftime("%H"))                         # Fetching Current System Time
 
-    if (current_Time < 12):
-        greeting = "Good Morning"
-    elif (current_Time < 17):
-        greeting = "Good Afternoon"
-    elif (current_Time > 17):
+    if (current_Time < 12):                                                   # Morning Time Condition
+        greeting = "Good Morning"                                             
+    elif (current_Time < 17):                                                 # Afternoon Time Condition
+        greeting = "Good Afternoon"                                           
+    elif (current_Time > 17):                                                 # Evening Time Condition
         greeting = "Good Evening"
-    else:
-        greeting = "Hello"    
+    else:                                                                     # In case of Issue in system Time
+        greeting = "Hello"                                                   
 
-    first_Line = greeting + ", My name is Jexi \n How may i help You"    
+    first_Line = greeting + ", My name is Jexi \n How may i help You"         # Jexi's First Line
 
     Jexi_Speak(first_Line) 
 	
-	
+
+# Key Words Function Code
+
+def Key_Word(Action, Key):
+    
+    # Defining Key words for Easy future Expansion
+  
+    Url_Keys = ["youtube","google","instagram","yahoo","linkedin","facebook","gmail","amazon"]
+    App_Keys = ["chrome","notepad","wmplayer","blender","explorer"]
+    Exit_Keys = ["bye","close","exit","terminate","quit"]    
+    
+    if (Key == "url"):                      # Checking Url Keywords
+        for x in Url_Keys:
+            if (x in Action):
+                return True
+            
+    elif (Key == "App"):                    # Checking Application Keywords
+        for x in App_Keys:
+            if (x in Action):
+                return (True,x)
+            
+        return False
+            
+    elif (Key == "Exit"):                   # Checking Exit Keywords
+        for x in Exit_Keys:
+            if (x in Action):
+                return (True,x)
+            else:
+                return (False,x)
+				
+				
 # Web Activity Code
 
 def Web_Browsing(Action):
     
-    if (("search" in Action) or ("google" in Action)):
+    if (("search" in Action) or ("google" in Action)):                        # Google Search Action
         Jexi_Speak ("What do you want to search for?")
         search = input()
-        Jexi_Speak ("Here's what i found for " + search + " on google.")
+        Jexi_Speak ("Here's what i found for " + search + " on google.")      
         web.open ("https://www.google.com/search?q=" + search)
         
-    else:
+    else:                                                                     # Going to a Website
         Jexi_Speak ("Where do you wanna go?")
-        Action = input()
+        Action = input().lower()
             
-        if ("https" not in Action):
+        if ("https" not in Action):                                           # Adding HTTPS for more secured Connection
             url = "https://" + Action 
             
         elif ("http" in Action):
-            url = Action.replace("http", "https")
+            url = Action.replace("http", "https")                             # Replacing HTTP with HTTPS
             
         else:
-            url = Action
+            url = Action                                                      
             
-        if ((".com" in url) or (".in" in url) or (".org" in url)):
+        if ((".com" in url) or (".in" in url) or (".org" in url)):            # If address is in Correct Domain format
             web.open (url)
+            Jexi_Speak("Have Fun.")
             
-        elif (("youtube" in url) or ("facebook" in url) or ("gmail" in url)):
+        elif (Key_Word (url, "url")):                                         # If addess doesn't have a domain the check the Keyword List
             web.open (url + ".com")
+            Jexi_Speak("Have Fun.")
             
-        else:
+        else:                                                                 # Still if not in recognised format then do a Google Search for the address
             Jexi_Speak ("I don't recognise this website, Let me run a Google Search for it instead.")
             web.open("https://www.google.com/search?q=" + url)
-
-
+			
+			
 # Main Menu Code
 
 def Menu():
     
     while True:
-        Action = input(":)")
+        Action = input(" :) ").lower()                                          # Taking Action Input & converting in Lower Case
         
-        if (("hi" in Action) or ("hello" in Action)):
-            os.system("Hello")
-            
-        elif ("chrome" in Action):
-            os.system("chrome")
-   
-        elif (("notepad" in Action) or ("text editor" in Action)):
-            os.system("notepad")
-            
-        elif (("your" in Action) and ("name" in Action)):
+        if (("hi" in Action) or ("hello" in Action)):                           # Interacting with Jexi with Hello or Hi
+            Jexi_Speak("Hello, I hope you a having a nice day.")
+        
+        elif (("your" in Action) and ("name" in Action)):                       # Ask Name
             Jexi_Speak("My name is Jexi.")
-            
-        elif ("media player" in Action):
-            os.system("wmplayer")
-            
-        elif ("blender" in Action):
-            os.system("blender")
+                
+        elif (Key_Word (Action, "App")[0]):                                     # Open an Application
+            os.system(Key_Word (Action, "App")[1])
+            Jexi_Speak("Sure")
+
+        elif ("outlook" in Action):                                             # Open Calculator
+            os.startfile("outlook")
+            Jexi_Speak("Right away")
         
-        elif (("my files" in Action) or ("my computer" in Action)):
-            os.system("explorer")
+        elif ("calculator" in Action):                                          # Open Calculator
+            os.system("C:\\Windows\\System32\\calc.exe")
+            Jexi_Speak("Of Course")
         
-        elif (("website" in Action) or ("search" in Action)):
+        elif ("wordpad" in Action):                                             # Open Wordpad
+            os.system("C:\\Windows\\System32\\write.exe")
+            Jexi_Speak("Sure")
+            
+        elif (("website" in Action) or ("search" in Action)):                   # Web Activity Function Call
             Web_Browsing(Action)
-        
-        elif (("bye" in Action) or ("quit" in Action) or ("exit" in Action)):
+       
+        elif (Key_Word (Action, "Exit")[0]):                                    # Saying Good Bye.
             Jexi_Speak("Until we meet again.")
-            break
+            break                                                               # Break out of Menu Loop
+            
         else:
-            Jexi_Speak("Sorry, I don't support this Action")
+            Jexi_Speak("Sorry, I don't support this Action")                    # Non Supported Action
+			
 			
 # main Function
-	
+
 def main():
     
-    Greeting()
-    Menu()
+    Greeting()            # Greeting Function Call
+    Menu()                # Main Menu Function Call
+	
 	
 if __name__ == "__main__":
     main()
